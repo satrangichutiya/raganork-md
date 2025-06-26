@@ -173,9 +173,17 @@ const shayaris = [
 Module({
   pattern: "loveraid",
   fromMe: false,
-  desc: "Send a love shayari in reply",
-  type: "fun"
+  desc: "Sends random romantic shayari repeatedly",
+  type: "love"
 }, async (message) => {
-  const random = shayaris[Math.floor(Math.random() * shayaris.length)];
-  await message.reply(random);
+  const target = message.reply_message || message;
+  const total = 15;
+
+  for (let i = 0; i < total; i++) {
+    const line = shayaris[Math.floor(Math.random() * shayaris.length)];
+    await message.client.sendMessage(message.jid, {
+      text: `💖 ${line}`
+    }, { quoted: target });
+    await new Promise(res => setTimeout(res, 1000)); // 1s delay
+  }
 });
