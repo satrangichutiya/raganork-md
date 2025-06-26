@@ -1,29 +1,30 @@
-const axios = require("axios");
-const FormData = require("form-data");
+const { Module } = require('../main');
+const axios = require('axios');
+const FormData = require('form-data');
+const fs = require('fs');
+const { writeFile } = require('fs/promises');
 
-module.exports = {
-  pattern: "carbon",
-  desc: "Generate carbon image from code",
-  type: "tool",
-  run: async (m, text) => {
-    const code = text || (m.quoted && m.quoted.text);
-    if (!code) return m.reply("Usage: .carbon <code>");
-    try {
-      const form = new FormData();
-      form.append("code", code);
-      form.append("theme", "seti");
-      form.append("backgroundColor", "rgba(171, 184, 195, 1)");
-      form.append("language", "auto");
+Module({
+  pattern: 'carbon ?(.*)',
+  fromMe: false,
+  desc: 'Convert text/code into carbon image',
+  type: 'tools'
+}, async (message, match) => {
+  let input = match[1] || message.reply_message?.text;
+  if (!input) return await message.sendReply('_Please provide some code/text!_\nUsage: `.carbon console.log("hi")`');
 
-      const res = await axios.post("https://carbonara.solopov.dev/api/cook", form, {
-        headers: form.getHeaders(),
-        responseType: "arraybuffer",
-      });
+  const carbonAPI = 'https://carbonara.solopov.dev/api/cook';
+  await message.sendReply('🎨 Generating Carbon Image...');
 
-      await m.sendMessage(m.chat, { image: Buffer.from(res.data), caption: "Here's your carbon image!" }, { quoted: m });
-    } catch (err) {
-      console.error(err);
-      m.reply("Failed to generate image.");
-    }
+  try {
+    const res = await axios.post(carbonAPI, { code: input }, { responseType: 'arraybuffer' });
+    const filename = './carbon_result.png';
+    await writeFile(filename, res.data);
+
+    await message.sendMessage({ image: { url: filename }, caption: "🖼️ Here's your Carbon code!" });
+    fs.unlinkSync(filename);
+  } catch (err) {
+    console.error(err);
+    return await message.sendReply('❌ Error generating Carbon image.');
   }
-};
+});
