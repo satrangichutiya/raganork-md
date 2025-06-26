@@ -170,38 +170,17 @@ const shayaris = [
     "Na parwah mainu duniya di👅👅",
 ];
 
-let targetUser = null;
-
 Module({
-  pattern: "loveraid ?(.*)",
-  fromMe: true,
-  desc: "Start loveraid on a user",
-  type: "love"
+  pattern: "shayari ?(.*)",
+  fromMe: false,
+  desc: "Spam love/sad shayari in chat",
+  type: "fun"
 }, async (message, match) => {
-  if (match) {
-    targetUser = match;
-    await message.send(`❤️‍🔥 Loveraid started on @${targetUser}`);
-  } else {
-    targetUser = null;
-    await message.send("❌ Loveraid target cleared.");
-  }
-});
+  const count = parseInt(match[1]) || 25;
+  if (count > 100) return await message.sendMessage("❌ Limit: Max 100 shayaris only.");
 
-Module({
-  on: "text"
-}, async (message, match, sock) => {
-  try {
-    if (
-      message.key?.participant?.includes(targetUser) ||
-      message.pushName?.toLowerCase().includes(targetUser?.toLowerCase())
-    ) {
-      const shayari =
-        shayaris[Math.floor(Math.random() * shayaris.length)];
-      await sock.sendMessage(message.key.remoteJid, {
-        text: `💘 ${shayari}`
-      }, { quoted: message });
-    }
-  } catch (e) {
-    console.log("Error in loveraid reply:", e);
+  for (let i = 0; i < count; i++) {
+    const line = shayariList[Math.floor(Math.random() * shayariList.length)];
+    await message.sendMessage(line);
   }
 });
