@@ -1,93 +1,82 @@
 const { Module } = require('../main');
 
-const gifs = {
-  attack: [
-    "https://media.tenor.com/x8v1oNUOmg4AAAAd/rickroll-rick.gif",
-    "https://media.tenor.com/EaA4y_O7BBsAAAAC/lol.gif",
-    "https://media.tenor.com/JJvup9-iIvoAAAAC/hacking-hack.gif",
-    "https://media.tenor.com/6u2gAz9psuEAAAAC/explosion-boom.gif",
-    "https://media.tenor.com/rLuG1eMBVpUAAAAC/matrix-code.gif",
-    "https://media.tenor.com/8j4QqYfp0bEAAAAC/hacked-anonymous.gif"
-  ],
+const gifActions = {
   slap: [
-    "https://media.tenor.com/1WPXOW0qULAAAAAC/slap.gif",
-    "https://media.tenor.com/JjRkdou2zNQAAAAC/slap-anime.gif",
-    "https://media.tenor.com/76zjX8Qpcp4AAAAC/anime-slap.gif",
-    "https://media.tenor.com/0AV2D3C3T1oAAAAC/slap-hit.gif"
+    "https://media.tenor.com/IvA8MT7JVoUAAAAC/slap.gif",
+    "https://media.tenor.com/oYxZF2DRwjoAAAAC/anime-slap.gif"
+  ],
+  hug: [
+    "https://media.tenor.com/2rlvZ9Yuqb4AAAAC/anime-hug.gif",
+    "https://media.tenor.com/XW5oZh4SqqsAAAAC/hug-love.gif"
+  ],
+  kiss: [
+    "https://media.tenor.com/i3z_hFP05_oAAAAC/anime-kiss.gif",
+    "https://media.tenor.com/lUq3wCB7S9oAAAAC/kiss-cute.gif"
   ],
   nuke: [
-    "https://media.tenor.com/fzK5Ucds1ysAAAAC/nuke-attack.gif",
-    "https://media.tenor.com/1kzG30KQjpoAAAAC/bomb-explode.gif",
-    "https://media.tenor.com/xgAwL49EBVYAAAAC/missile-launch.gif",
-    "https://media.tenor.com/NuD5LRIO5kIAAAAC/nuke-nuclear.gif"
+    "https://media.tenor.com/CM_7y-6I9nUAAAAC/nuke-explosion.gif",
+    "https://media.tenor.com/FSPVsxgMHiYAAAAC/nuclear-boom.gif"
+  ],
+  kill: [
+    "https://media.tenor.com/OE1xgZ6wktYAAAAC/kill-anime.gif",
+    "https://media.tenor.com/7vC61LVRThQAAAAC/kill-sword.gif"
+  ],
+  fuck: [
+    "https://media.tenor.com/dFvIBvTUkBEAAAAC/sex-hentai.gif"
+  ],
+  bite: [
+    "https://media.tenor.com/xTbGp0w_zD0AAAAC/bite-vampire.gif"
+  ],
+  lick: [
+    "https://media.tenor.com/38EZdkD5usIAAAAC/anime-lick.gif"
+  ],
+  cum: [
+    "https://media.tenor.com/jdrrwks-l1QAAAAC/hentai-cum.gif"
+  ],
+  stab: [
+    "https://media.tenor.com/c0ls8Paq5r0AAAAC/stab-anime.gif"
+  ],
+  choke: [
+    "https://media.tenor.com/WI8VJdn1rhkAAAAC/choke-anime.gif"
+  ],
+  boom: [
+    "https://media.tenor.com/vNcfdcMfHTgAAAAC/boom-nuke.gif"
+  ],
+  spank: [
+    "https://media.tenor.com/YUB9NidNnVEAAAAC/spank.gif"
+  ],
+  attack: [
+    "https://media.tenor.com/Rfp1DWgEvRIAAAAC/attack-punch.gif"
+  ],
+  punch: [
+    "https://media.tenor.com/yZ37cEzX_g0AAAAC/punch.gif"
+  ],
+  dance: [
+    "https://media.tenor.com/O4-x-zJwCkQAAAAC/anime-dance.gif"
+  ],
+  cry: [
+    "https://media.tenor.com/3GYhWv3SbzYAAAAC/crying-anime.gif"
+  ],
+  love: [
+    "https://media.tenor.com/gz4c8E3U2bQAAAAC/anime-love.gif"
+  ],
+  kick: [
+    "https://media.tenor.com/BKpGpRQGttYAAAAC/kick-anime.gif"
+  ],
+  sex: [
+    "https://media.tenor.com/8K7z1l_KGO8AAAAC/hentai-sex.gif"
   ]
 };
 
-function getRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+for (let action in gifActions) {
+  Module({
+    pattern: action,
+    fromMe: false,
+    desc: `${action} someone with a gif`,
+    type: 'gif'
+  }, async (message, match) => {
+    const gifs = gifActions[action];
+    const gif = gifs[Math.floor(Math.random() * gifs.length)];
+    await message.sendFromUrl(gif, { caption: `🔞 ${action.toUpperCase()} ACTION!` });
+  });
 }
-
-// 🔥 GIF ATTACK
-Module({
-  pattern: "gifattack ?(.*)",
-  fromMe: false,
-  desc: "Spam funny gifs on user",
-  type: "fun"
-}, async (msg, match) => {
-  const target = match[1] || "Target";
-  await msg.sendMessage(`🎯 Starting GIF ATTACK on *${target}*`);
-
-  for (let i = 0; i < 10; i++) {
-    await msg.sendMessage({ video: { url: getRandom(gifs.attack) }, caption: `🔥 Attack on ${target}` });
-    await new Promise(res => setTimeout(res, 1000));
-  }
-
-  await msg.sendMessage(`💣 GIF ATTACK complete on *${target}*`);
-});
-
-// 🖐️ SLAP GIF
-Module({
-  pattern: "gifslap ?(.*)",
-  fromMe: false,
-  desc: "Slap someone with gifs",
-  type: "fun"
-}, async (msg, match) => {
-  const target = match[1] || "😶";
-  await msg.sendMessage(`🖐️ Slapping *${target}*...`);
-
-  for (let i = 0; i < 6; i++) {
-    await msg.sendMessage({ video: { url: getRandom(gifs.slap) }, caption: `💥 ${target} got slapped!` });
-    await new Promise(res => setTimeout(res, 900));
-  }
-
-  await msg.sendMessage(`✅ Slap session ended for *${target}*`);
-});
-
-// ☢️ NUKE GIF
-Module({
-  pattern: "gifnuke ?(.*)",
-  fromMe: false,
-  desc: "Nuke someone with massive GIFs",
-  type: "fun"
-}, async (msg, match) => {
-  const target = match[1] || "👻";
-  await msg.sendMessage(`☢️ LAUNCHING NUCLEAR GIFS on *${target}*`);
-
-  for (let i = 0; i < 6; i++) {
-    await msg.sendMessage({ video: { url: getRandom(gifs.nuke) }, caption: `💀 ${target} nuked!` });
-    await new Promise(res => setTimeout(res, 1100));
-  }
-
-  await msg.sendMessage(`💥 ${target} has been vaporized!`);
-});
-
-// 🚫 ANTI-GIF
-Module({
-  pattern: "antigif",
-  fromMe: false,
-  desc: "Funny anti-gif protection mode",
-  type: "fun"
-}, async (msg) => {
-  await msg.sendMessage(`🛡️ Activating Anti-GIF Shields...`);
-  await msg.sendMessage({ video: { url: "https://media.tenor.com/UKUZkxXzWgMAAAAC/shield-shield-up.gif" }, caption: "🛡 Protected from lame GIFs!" });
-});
