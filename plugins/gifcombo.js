@@ -1,5 +1,11 @@
 const { Module } = require('../main');
-const { getBuffer } = require('../lib/functions'); // Ensure you have a working getBuffer helper
+const axios = require('axios');
+
+// 👇 getBuffer function built-in here, no external lib needed
+async function getBuffer(url) {
+  const res = await axios.get(url, { responseType: 'arraybuffer' });
+  return res.data;
+}
 
 const gifActions = {
   slap: [
@@ -39,7 +45,7 @@ const gifActions = {
   sex: ["https://media.tenor.com/8K7z1l_KGO8AAAAC/hentai-sex.gif"]
 };
 
-// Register each action command
+// Register each gif action as a command
 for (let action in gifActions) {
   Module({
     pattern: action,
@@ -58,6 +64,7 @@ for (let action in gifActions) {
         caption: `💥 *${action.toUpperCase()}!*`
       }, { quoted: message });
     } catch (err) {
+      console.error(`Error on .${action}:`, err);
       await message.reply("❌ Failed to fetch gif.");
     }
   });
