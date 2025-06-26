@@ -1,35 +1,29 @@
-const { cmd } = require('../lib');
-const axios = require('axios');
-const FormData = require('form-data');
+const axios = require("axios");
+const FormData = require("form-data");
 
-cmd({
-  pattern: 'carbon ?(.*)',
-  desc: 'Generate Carbon image from code',
-  type: 'tool'
-}, async (m, match) => {
-  const code = match || (m.quoted && m.quoted.text);
+module.exports = {
+  pattern: "carbon",
+  desc: "Generate carbon image from code",
+  type: "tool",
+  run: async (m, text) => {
+    const code = text || (m.quoted && m.quoted.text);
+    if (!code) return m.reply("Usage: .carbon <code>");
+    try {
+      const form = new FormData();
+      form.append("code", code);
+      form.append("theme", "seti");
+      form.append("backgroundColor", "rgba(171, 184, 195, 1)");
+      form.append("language", "auto");
 
-  if (!code) return m.reply('Please provide some code.\nExample: .carbon console.log("Hello");');
+      const res = await axios.post("https://carbonara.solopov.dev/api/cook", form, {
+        headers: form.getHeaders(),
+        responseType: "arraybuffer",
+      });
 
-  try {
-    let form = new FormData();
-    form.append('code', code);
-    form.append('theme', 'seti'); // you can change theme if needed
-    form.append('backgroundColor', 'rgba(171, 184, 195, 1)');
-    form.append('language', 'auto');
-
-    const res = await axios.post('https://carbonara.solopov.dev/api/cook', form, {
-      headers: form.getHeaders(),
-      responseType: 'arraybuffer'
-    });
-
-    await m.sendMessage(m.chat, {
-      image: Buffer.from(res.data),
-      caption: 'Here is your Carbon code image 🌈'
-    }, { quoted: m });
-
-  } catch (err) {
-    console.error(err);
-    m.reply('❌ Failed to generate carbon image.');
+      await m.sendMessage(m.chat, { image: Buffer.from(res.data), caption: "Here's your carbon image!" }, { quoted: m });
+    } catch (err) {
+      console.error(err);
+      m.reply("Failed to generate image.");
+    }
   }
-});
+};
