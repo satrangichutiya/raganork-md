@@ -171,16 +171,16 @@ const shayaris = [
 ];
 
 Module({
-  pattern: "shayari ?(.*)",
+  pattern: 'loveraid ?(.*)',
   fromMe: false,
-  desc: "Spam love/sad shayari in chat",
-  type: "fun"
+  desc: '💘 Spam love shayaris like a loveraid',
+  type: 'fun'
 }, async (message, match) => {
   const count = parseInt(match[1]) || 25;
   if (count > 100) return await message.sendMessage("❌ Limit: Max 100 shayaris only.");
 
   for (let i = 0; i < count; i++) {
-    const line = shayariList[Math.floor(Math.random() * shayariList.length)];
+    const line = shayaris[Math.floor(Math.random() * shayaris.length)];
     await message.sendMessage(line);
   }
 });
