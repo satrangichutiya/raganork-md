@@ -1,10 +1,10 @@
-const { Module } = require('../main');
+const { Module } = require("../main");
 
 Module({
-  pattern: 'hello',
+  pattern: "hello",
   fromMe: false,
-  desc: 'Replies with hello message',
-  type: 'fun'
+  desc: "Sends hello message",
+  type: "misc"
 }, async (message) => {
-  await message.reply('👋 Hello bhai! Bot is working perfectly 💥');
+  await message.sendMessage({ text: "👋 Hello bhai! I'm alive and ready 🚀" });
 });
