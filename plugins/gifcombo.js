@@ -1,4 +1,5 @@
 const { Module } = require('../main');
+const { getBuffer } = require('../lib/functions'); // Ensure you have a working getBuffer helper
 
 const gifActions = {
   slap: [
@@ -21,62 +22,43 @@ const gifActions = {
     "https://media.tenor.com/OE1xgZ6wktYAAAAC/kill-anime.gif",
     "https://media.tenor.com/7vC61LVRThQAAAAC/kill-sword.gif"
   ],
-  fuck: [
-    "https://media.tenor.com/dFvIBvTUkBEAAAAC/sex-hentai.gif"
-  ],
-  bite: [
-    "https://media.tenor.com/xTbGp0w_zD0AAAAC/bite-vampire.gif"
-  ],
-  lick: [
-    "https://media.tenor.com/38EZdkD5usIAAAAC/anime-lick.gif"
-  ],
-  cum: [
-    "https://media.tenor.com/jdrrwks-l1QAAAAC/hentai-cum.gif"
-  ],
-  stab: [
-    "https://media.tenor.com/c0ls8Paq5r0AAAAC/stab-anime.gif"
-  ],
-  choke: [
-    "https://media.tenor.com/WI8VJdn1rhkAAAAC/choke-anime.gif"
-  ],
-  boom: [
-    "https://media.tenor.com/vNcfdcMfHTgAAAAC/boom-nuke.gif"
-  ],
-  spank: [
-    "https://media.tenor.com/YUB9NidNnVEAAAAC/spank.gif"
-  ],
-  attack: [
-    "https://media.tenor.com/Rfp1DWgEvRIAAAAC/attack-punch.gif"
-  ],
-  punch: [
-    "https://media.tenor.com/yZ37cEzX_g0AAAAC/punch.gif"
-  ],
-  dance: [
-    "https://media.tenor.com/O4-x-zJwCkQAAAAC/anime-dance.gif"
-  ],
-  cry: [
-    "https://media.tenor.com/3GYhWv3SbzYAAAAC/crying-anime.gif"
-  ],
-  love: [
-    "https://media.tenor.com/gz4c8E3U2bQAAAAC/anime-love.gif"
-  ],
-  kick: [
-    "https://media.tenor.com/BKpGpRQGttYAAAAC/kick-anime.gif"
-  ],
-  sex: [
-    "https://media.tenor.com/8K7z1l_KGO8AAAAC/hentai-sex.gif"
-  ]
+  fuck: ["https://media.tenor.com/dFvIBvTUkBEAAAAC/sex-hentai.gif"],
+  bite: ["https://media.tenor.com/xTbGp0w_zD0AAAAC/bite-vampire.gif"],
+  lick: ["https://media.tenor.com/38EZdkD5usIAAAAC/anime-lick.gif"],
+  cum: ["https://media.tenor.com/jdrrwks-l1QAAAAC/hentai-cum.gif"],
+  stab: ["https://media.tenor.com/c0ls8Paq5r0AAAAC/stab-anime.gif"],
+  choke: ["https://media.tenor.com/WI8VJdn1rhkAAAAC/choke-anime.gif"],
+  boom: ["https://media.tenor.com/vNcfdcMfHTgAAAAC/boom-nuke.gif"],
+  spank: ["https://media.tenor.com/YUB9NidNnVEAAAAC/spank.gif"],
+  attack: ["https://media.tenor.com/Rfp1DWgEvRIAAAAC/attack-punch.gif"],
+  punch: ["https://media.tenor.com/yZ37cEzX_g0AAAAC/punch.gif"],
+  dance: ["https://media.tenor.com/O4-x-zJwCkQAAAAC/anime-dance.gif"],
+  cry: ["https://media.tenor.com/3GYhWv3SbzYAAAAC/crying-anime.gif"],
+  love: ["https://media.tenor.com/gz4c8E3U2bQAAAAC/anime-love.gif"],
+  kick: ["https://media.tenor.com/BKpGpRQGttYAAAAC/kick-anime.gif"],
+  sex: ["https://media.tenor.com/8K7z1l_KGO8AAAAC/hentai-sex.gif"]
 };
 
+// Register each action command
 for (let action in gifActions) {
   Module({
     pattern: action,
     fromMe: false,
-    desc: `${action} someone with a gif`,
+    desc: `Sends ${action} gif`,
     type: 'gif'
-  }, async (message, match) => {
+  }, async (message) => {
     const gifs = gifActions[action];
-    const gif = gifs[Math.floor(Math.random() * gifs.length)];
-    await message.sendFromUrl(gif, { caption: `🔞 ${action.toUpperCase()} ACTION!` });
+    const gifURL = gifs[Math.floor(Math.random() * gifs.length)];
+
+    try {
+      const buffer = await getBuffer(gifURL);
+      await message.client.sendMessage(message.jid, {
+        video: buffer,
+        gifPlayback: true,
+        caption: `💥 *${action.toUpperCase()}!*`
+      }, { quoted: message });
+    } catch (err) {
+      await message.reply("❌ Failed to fetch gif.");
+    }
   });
 }
