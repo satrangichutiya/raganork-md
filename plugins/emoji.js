@@ -1,19 +1,18 @@
-const emojis = [
-  "😂", "🤣", "😈", "🔥", "💣", "💀", "❤️", "🤡", "🥵", "👻", "😎",
-  "🤯", "💫", "🌪️", "🚀", "👿", "👀", "😵‍💫", "👅", "🧠", "🎯", "⚔️", "🥴"
-];
+const { Module } = require('../main');
 
-module.exports = {
-  pattern: "emoji",
-  desc: "Emoji spam raid",
-  type: "fun",
-  run: async (m, text) => {
-    let count = parseInt(text.trim()) || 20;
-    if (count > 100) return m.reply("Max 100 emojis allowed.");
-    for (let i = 0; i < count; i++) {
-      const msg = emojis[Math.floor(Math.random() * emojis.length)];
-      await m.reply(msg.repeat(Math.floor(Math.random() * 4) + 1));
-      await new Promise(res => setTimeout(res, 150));
+const emojis = ["💀", "🔥", "😈", "👻", "💣", "🚨", "☠️", "⚔️", "🔪", "🥵"];
+
+Module({
+  pattern: "emojiraid",
+  fromMe: false,
+  desc: "Send emoji spam",
+  type: "fun"
+}, async (message) => {
+  for (let i = 0; i < 20; i++) {
+    let spam = "";
+    for (let j = 0; j < 15; j++) {
+      spam += emojis[Math.floor(Math.random() * emojis.length)] + " ";
     }
+    await message.sendMessage(spam);
   }
-};
+});
