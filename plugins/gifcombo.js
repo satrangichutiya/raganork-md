@@ -1,12 +1,13 @@
 const { Module } = require('../main');
-const axios = require('axios');
+const axios = require("axios");
 
-// 👇 getBuffer function built-in here, no external lib needed
+// Helper to fetch GIF as buffer
 async function getBuffer(url) {
   const res = await axios.get(url, { responseType: 'arraybuffer' });
   return res.data;
 }
 
+// List of gif actions and URLs
 const gifActions = {
   slap: [
     "https://media.tenor.com/IvA8MT7JVoUAAAAC/slap.gif",
@@ -45,16 +46,16 @@ const gifActions = {
   sex: ["https://media.tenor.com/8K7z1l_KGO8AAAAC/hentai-sex.gif"]
 };
 
-// Register each gif action as a command
+// Create a command for each action
 for (let action in gifActions) {
   Module({
     pattern: action,
     fromMe: false,
-    desc: `Sends ${action} gif`,
+    desc: `Sends a ${action} gif`,
     type: 'gif'
   }, async (message) => {
-    const gifs = gifActions[action];
-    const gifURL = gifs[Math.floor(Math.random() * gifs.length)];
+    const gifList = gifActions[action];
+    const gifURL = gifList[Math.floor(Math.random() * gifList.length)];
 
     try {
       const buffer = await getBuffer(gifURL);
@@ -64,8 +65,9 @@ for (let action in gifActions) {
         caption: `💥 *${action.toUpperCase()}!*`
       }, { quoted: message });
     } catch (err) {
-      console.error(`Error on .${action}:`, err);
-      await message.reply("❌ Failed to fetch gif.");
+      await message.client.sendMessage(message.jid, {
+        text: `❌ Failed to send *${action}* gif.`
+      }, { quoted: message });
     }
   });
 }
