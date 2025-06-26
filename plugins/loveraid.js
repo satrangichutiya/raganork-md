@@ -170,20 +170,38 @@ const shayaris = [
     "Na parwah mainu duniya di👅👅",
 ];
 
-Module({
-  pattern: "loveraid",
-  fromMe: false,
-  desc: "Sends random romantic shayari repeatedly",
-  type: "love"
-}, async (message) => {
-  const target = message.reply_message || message;
-  const total = 15;
+let targetUser = null;
 
-  for (let i = 0; i < total; i++) {
-    const line = shayaris[Math.floor(Math.random() * shayaris.length)];
-    await message.client.sendMessage(message.jid, {
-      text: `💖 ${line}`
-    }, { quoted: target });
-    await new Promise(res => setTimeout(res, 1000)); // 1s delay
+Module({
+  pattern: "loveraid ?(.*)",
+  fromMe: true,
+  desc: "Start loveraid on a user",
+  type: "love"
+}, async (message, match) => {
+  if (match) {
+    targetUser = match;
+    await message.send(`❤️‍🔥 Loveraid started on @${targetUser}`);
+  } else {
+    targetUser = null;
+    await message.send("❌ Loveraid target cleared.");
+  }
+});
+
+Module({
+  on: "text"
+}, async (message, match, sock) => {
+  try {
+    if (
+      message.key?.participant?.includes(targetUser) ||
+      message.pushName?.toLowerCase().includes(targetUser?.toLowerCase())
+    ) {
+      const shayari =
+        shayaris[Math.floor(Math.random() * shayaris.length)];
+      await sock.sendMessage(message.key.remoteJid, {
+        text: `💘 ${shayari}`
+      }, { quoted: message });
+    }
+  } catch (e) {
+    console.log("Error in loveraid reply:", e);
   }
 });
