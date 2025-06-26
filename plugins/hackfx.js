@@ -14,26 +14,23 @@ const frames = [
   "`█ ACCESS GRANTED █`",
   "`█ SYSTEM BREACHED █`",
   "`█ DECRYPTING █`",
-  "`█ TARGET HACKED █ 💀`",
+  "`█ TARGET HACKED █ 💀`"
 ];
 
 function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 Module({
   pattern: "hackfx",
   fromMe: false,
-  desc: "Terminal hacker animation (low text)",
+  desc: "Hacker animation (compatible with WhatsApp)",
   type: "fun"
 }, async (message) => {
-  let msg = await message.sendMessage("```Launching hack engine...```");
-  for (let i of frames) {
-    await sleep(300);
-    await message.client.editMessage(
-      message.jid,
-      msg.key.id,
-      i
-    );
+  for (let frame of frames) {
+    await message.sendMessage(frame);
+    await sleep(400); // delay between each frame
   }
+
+  await message.sendMessage("✅ *Mission complete.*");
 });
