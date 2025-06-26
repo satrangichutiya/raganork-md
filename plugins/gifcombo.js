@@ -28,18 +28,33 @@ for (let action in gifActions) {
     fromMe: false,
     desc: `Send ${action} gif`,
     type: 'gif'
-  }, async (message, match, client) => {
+  }, async (message, match, sock) => {
     const gifUrl = gifActions[action];
+
+    if (!sock || !sock.sendMessage) {
+      console.error("❌ sock is undefined or does not support sendMessage");
+      return;
+    }
+
     try {
-      await client.sendMessage(message.key.remoteJid, {
-        video: { url: gifUrl },
-        gifPlayback: true,
-        caption: `🔞 *${action.toUpperCase()} ACTION!*`
-      }, { quoted: message });
+      await sock.sendMessage(
+        message.key.remoteJid,
+        {
+          video: { url: gifUrl },
+          gifPlayback: true,
+          caption: `🔞 *${action.toUpperCase()} ACTION!*`
+        },
+        { quoted: message }
+      );
     } catch (e) {
-      await client.sendMessage(message.key.remoteJid, {
-        text: `❌ Could not send *${action}* gif.`
-      }, { quoted: message });
+      console.error(`❌ Error sending ${action} gif:`, e);
+      await sock.sendMessage(
+        message.key.remoteJid,
+        {
+          text: `❌ Could not send *${action}* gif.`
+        },
+        { quoted: message }
+      );
     }
   });
 }
