@@ -1,64 +1,103 @@
 const { Module } = require('../main');
 
-// 💌 Shayari Collection (Sad, Love, Flirt, Hard)
-const shayariLines = [
-  "💔 Tera chehra meri aakhri khushi tha...",
-  "😔 Dil to toot gaya par teri yaadein zinda hain...",
-  "❤️ Tumse milke lagta hai sab theek ho jaayega...",
-  "🥀 Har pal yaad karta hoon tujhe...",
-  "🔥 Tere bina bhi jee raha hoon, lekin zinda nahi hoon...",
-  "💘 Har raat sirf tera naam hota hai aankhon mein...",
-  "🌪️ Aansuon se bhari meri duniya mein tu bas ek chamak hai...",
-  "😈 Tu hansi thi kisi aur ke liye, par barbad mujhe kar gayi...",
-  "💌 Aaj phir teri yaad ne rulaya...",
-  "🥵 Pyar mein jo jalega, wahi to roshan karega duniya ko...",
-  "❤️‍🔥 Tune toh kaha tha saath doge, par raste badal diye...",
-  "💥 Har msg tera aankhon ka nasha ban gaya hai...",
-  "🌹 Mohabbat mein sab kuch khona padta hai...",
-  "🌑 Tu meri duniya thi, ab andhera hai...",
-  "🖤 Aankhon se aansu nahi, zakhm tapak rahe hain...",
-  "💓 Tera har msg meri saans ban gaya hai...",
-  "🧨 Tere jaane ke baad sab kuch suna suna sa lagta hai...",
-  "💗 Main rota nahi, par tere liye sab chhupa leta hoon...",
-  "🔪 Pyar ka matlab hai dard, aur tu uska saboot hai...",
-  "🚬 Har baar hasi aayi, par tere bina adhoori thi..."
+// Apni gali/raid list yaha import karo ya copy paste
+const galiList = [
+    "Sab batain bhul jha Mari pakad ke jhull jha🤣",
+    "TERI MAA KI CHUT ME GHUTKA KHAAKE THOOK DUNGA 🤣",
+    "TERE BEHEN K CHUT ME CHAKU DAAL KAR CHUT KA KHOON KAR DUGA",
+    "TERI VAHEEN NHI HAI KYA? 9 MAHINE RUK SAGI VAHEEN DETA HU 🤣",
+    "TERE PURE KHANDAN KI AURATO KO RANDI BANA DUNGA 🔥",
+    "TERI MAA KO RANDI KHANE ME BECH DUNGA 💰",
+    "उदास क्यों रहते हो तन्हा शाम की तरह आओ मेरा land चूसो देसी आम की तरह",
+    "TERI BEHEN KA BHOSDA FAAD KE RAKJ DUNGA 🗡️",
+    "TERI MAA KE BHOSDE ME HATHI KA LUND 🐘",
+    "TERI BEHEN KI CHUT ME ZEHER LAGA DUNGA 🧪",
+    "TERI MAA KO MERE GHAR PE NANGA NACH KARNA PADEGA 💃",
+    "TERI BEHEN KI GAAND ME SARIYA DAAL DUNGA 🔨",
+    "TERE PURE KHANDAN KO MERE TATTE CHATNA PADEGA 👅",
+    "TERI MAA KI CHUT ME NUCLEAR BOMB 💣",
+    "TERI BEHEN KE BHOSDE ME DYNAMITE 🧨",
+    "TERI MAA KO JOHNNY SINS SE CHUDWA DUNGA 🎥",
+    "TERI FAMILY KO MERE JUTTE CHATNE PADENGE 👞",
+    "TERI MAA KA BHOSDA FAAD DUNGA 🔪",
+    "TERI BEHEN KI CHUT ME ROCKET LAUNCHER 🚀",
+    "TERE PURE KHANDAN KO MERE PAAS RANDI BANKE KAAM KARNA PADEGA 💼",
+    "TERI MAA KO GB ROAD PE BECH DUNGA 🏪",
+    "TERI BEHEN KO KOTHE PE BITHA DUNGA 🏠",
+    "TERI MAA KI CHUT ME TANK GHUSA DUNGA 🚛",
+    "TERE BAAP KO TERE SAMNE CHOD DUNGA 🤺",
+    "TERI MAA KE BHOSDE ME HELICOPTER KA PANKHA 🚁",
+    "TERI BEHEN KI CHUT ME METRO CHALWA DUNGA 🚇",
+    "TERI MAA KO TERE DOSTO SE CHUDWA DUNGA 👥",
+    "TERI BEHEN KI CHUT ME BANDOOK KI GOLI 🔫",
+    "TERI MAA KO KUTTO SE CHUDWA DUNGA 🐕",
+    "TERE PURE KHANDAN KI AURATO KO NANGI KARWA DUNGA 👯",
+    "TERI BEHEN KO RANDI BAZAR ME NANGA NACHWA DUNGA 💃",
+    "TERI MAA KE BHOSDE ME SUWAR KA LUND 🐷",
+    "TERE BAAP KO BECH DUNGA CHAKLO PE 🏃",
+    "TERI BEHEN KE BHOSDE ME CREDIT CARD 💳",
+    "TERI MAA KI CHUT ME SCREW DRIVER 🔧",
+    "TERE PURE KHANDAN KO MERE LUND PE NACHWA DUNGA 🕺",
+    "TERI BEHEN KI CHUT ME LATHI DAAL DUNGA 🏏",
+    "TERI MAA KO BISTAR PE LETA DUNGA 🛏️",
+    "TERE BEHEN KE BHOSDE ME HATODA 🔨",
+    "TERI MAA KI CHUT ME MURGA 🐓",
+    "TERE BAAP KI GAAND ME DANDA 🎋",
+    "TERI BEHEN KI CHUT ME PIPE BOMB 💣",
+    "TERI MAA KO VIRAL KAR DUNGA 📱",
+    "TERE PURE KHANDAN KO MERE PAAS BHIKARI BANKE AANA PADEGA 🙏",
+    "TERI BEHEN KI CHUT ME LASER BEAM 🌟",
+    "TERI MAA KE BHOSDE ME CYLINDER 🛢️",
+    "TERE BAAP KO TERE SAMNE NACHWA DUNGA 🕴️",
+    "TERI BEHEN KO WEBCAM PE NACHWA DUNGA 📸",
+    "TERI MAA KI CHUT ME BULLDOZER 🚜",
+    "TERE PURE KHANDAN KO MERE LUND KI DAS BANA DUNGA 👑",
+    "TERI BEHEN KI GAAND ME ROCKET 🚀",
+    "TERI MAA KO PORNHUB PE VIRAL KAR DUNGA 🎥"
+    "TERI MAA RANDI HAI KYA BHOSDIWALE GAAND MARWA RAHA",
+    "TERI MAAKA BHOSDA FAAD DIA KYA MAINE JO TAG KR RAHA RANDI KI OLAAD?",
+    "ARE YAR KITNA CHODU TERI RANDI MAA KO AB TERI RANDIYO BEHEN KO BHEJ",
+    " TERI MAA KI CHUT KAKTE  GALI KE KUTTO  ME BAAT DUNGA PHIR  BREAD KI TARH KHAYENGE WO TERI MAA KI CHUT",
+    "MAINE SUNA HAI TERI RANDI MAA KI CHUDAI HUI THI ROAD PAR AUR BATAU CHODNE WALA ME HI THA😂",
+    "RANDI KE BACCHE TAG KYU KRA TUNE JAB TERI LADNE ME GAAND FAT TI HAI RAAND KO OLAAD TERI MAALO CHODU",
+    " TERI MAA KO REDI PE BAITHAL KE USSE USKI CHUT BILWAUNGAA ",
+    " TERI MAAA KA LAND TERE BAAP KI CHUT TERI BEHEN DI PHUDDI FADU OYE BEHEN KE LAND",
+    "JAA RE SUAR KI OLAD RANDI KA BACCHA TAG  📡",
+  "MC BC BOLE TO TU 👿"
 ];
 
-let loveRaidTargets = [];
+// Auto-reply map: jid => enabled/disabled
+const autoReplyUsers = new Set();
 
 Module({
-  pattern: "addlove ?(.*)",
+  pattern: 'replyraid (on|off)',
   fromMe: true,
-  desc: "Start auto-love raid on mentioned user",
-  type: "fun"
+  desc: 'Enable/disable reply gali/raid mode',
+  type: 'fun'
 }, async (message, match) => {
-  const user = match || (message.mentionedJid && message.mentionedJid[0]);
-  if (!user) return await message.sendMessage("❌ Mention someone to start love raid.");
-  if (!loveRaidTargets.includes(user)) loveRaidTargets.push(user);
-  await message.sendMessage(`💘 Love raid started on @${user.split('@')[0]}`, { mentions: [user] });
+  const jid = message.jid;
+  const status = match[1];
+
+  if (status === 'on') {
+    autoReplyUsers.add(jid);
+    await message.sendMessage('_💥 Reply Raid Mode: ON_');
+  } else {
+    autoReplyUsers.delete(jid);
+    await message.sendMessage('_🛑 Reply Raid Mode: OFF_');
+  }
 });
 
+// Hook into all messages
 Module({
-  pattern: "stoplove ?(.*)",
-  fromMe: true,
-  desc: "Stop love raid on mentioned user",
-  type: "fun"
-}, async (message, match) => {
-  const user = match || (message.mentionedJid && message.mentionedJid[0]);
-  if (!user) return await message.sendMessage("❌ Mention someone to stop love raid.");
-  loveRaidTargets = loveRaidTargets.filter(id => id !== user);
-  await message.sendMessage(`✅ Love raid stopped on @${user.split('@')[0]}`, { mentions: [user] });
-});
-
-Module({
-  on: "message",
+  on: 'message',
   fromMe: false
 }, async (message) => {
-  const sender = message.sender;
-  if (!sender || !loveRaidTargets.includes(sender)) return;
-  const randomLine = shayariLines[Math.floor(Math.random() * shayariLines.length)];
-  await message.client.sendMessage(message.jid, {
-    text: randomLine,
-    mentions: [sender]
-  }, { quoted: message });
+  if (!message || !message.jid) return;
+  if (!autoReplyUsers.has(message.jid)) return;
+
+  // Gali randomly
+  const gali = galiList[Math.floor(Math.random() * galiList.length)];
+
+  // Send as reply
+  await message.sendMessage({ text: gali }, { quoted: message });
 });
