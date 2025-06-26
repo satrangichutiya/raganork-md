@@ -1,9 +1,10 @@
-const { cmd } = require('../lib') // or your framework helper path
+const { Module } = require('../main');
 
-cmd({
+Module({
   pattern: 'hello',
-  desc: 'Reply with a greeting',
+  fromMe: false,
+  desc: 'Replies with hello message',
   type: 'fun'
 }, async (message) => {
-  await message.reply('👋 Hello! I am alive and kicking!')
-})
+  await message.reply('👋 Hello bhai! Bot is working perfectly 💥');
+});
