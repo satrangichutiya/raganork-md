@@ -9,11 +9,15 @@ Module({
   const emojis = ['🤣', '💀', '😈', '😹', '🤡', '👻', '🔥', '💥', '🌪️', '💫', '🧨', '🎉'];
   let count = parseInt(match[1]) || 50;
 
-  for (let i = 0; i < count; i++) {
-    const rain = Array(20).fill(0).map(() => emojis[Math.floor(Math.random() * emojis.length)]).join(" ");
-    await message.sendMessage({ text: rain });
-    await new Promise(resolve => setTimeout(resolve, 800));
+  if (count > 100) {
+    return await message.sendMessage("❌ Max 100 emoji rains allowed.");
   }
 
-  await message.sendMessage({ text: "🎯 *Emoji Attack Complete!* 🔥" });
+  for (let i = 0; i < count; i++) {
+    const rain = Array(20).fill(0).map(() => emojis[Math.floor(Math.random() * emojis.length)]).join(" ");
+    await message.sendMessage(rain);
+    await new Promise(resolve => setTimeout(resolve, 700)); // optional delay
+  }
+
+  await message.sendMessage("🎯 *Emoji Attack Complete!* 🔥");
 });
