@@ -1,21 +1,34 @@
 const { Module } = require('../main');
+const axios = require("axios");
 
-const FADED_AUDIO = 'https://github.com/satnami-dev/music/raw/main/faded.mp3'; // direct MP3 URL
+async function getBuffer(url) {
+  const res = await axios.get(url, { responseType: "arraybuffer" });
+  return res.data;
+}
+
+const FADED_AUDIO = 'https://github.com/satnami-dev/music/raw/main/faded.mp3';
 
 Module({
-  pattern: '.*', // Catch-all
+  pattern: '.*', // Match all messages
   fromMe: false,
   type: 'auto'
 }, async (message) => {
-  const msgText = (message.body || '').toLowerCase().trim();
+  const msgText = (message.body || "").toLowerCase().trim();
 
-  if (msgText === 'hi') {
-    await message.send('👋 *HELLO THIS IS NEXUS XMD*\n💠 _How can I help you?_');
+  if (msgText === "hi") {
+    await message.send("*👋 HELLO THIS IS NEXUS XMD*\n💠 _How can I help you?_");
 
-    await message.sendFromUrl(FADED_AUDIO, {
-      mimetype: 'audio/mpeg',
-      ptt: false, // set true if you want voice note style
-      caption: '🎶 Alan Walker - Faded'
-    });
+    try {
+      const buffer = await getBuffer(FADED_AUDIO);
+      await message.client.sendMessage(message.jid, {
+        audio: buffer,
+        mimetype: 'audio/mpeg',
+        ptt: false,
+        caption: '🎧 Alan Walker - Faded'
+      }, { quoted: message });
+    } catch (err) {
+      console.error("Error sending audio:", err);
+      await message.send("❌ Error: Could not send the audio.");
+    }
   }
 });
