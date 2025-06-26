@@ -1,30 +1,21 @@
 const { Module } = require('../main');
 const axios = require('axios');
-const FormData = require('form-data');
 const fs = require('fs');
 const { writeFile } = require('fs/promises');
 
 Module({
-  pattern: 'carbon ?(.*)',
+  pattern: "carbon ?(.*)",
   fromMe: false,
-  desc: 'Convert text/code into carbon image',
-  type: 'tools'
+  desc: "Convert code to carbon image",
+  type: "tools"
 }, async (message, match) => {
-  let input = match[1] || message.reply_message?.text;
-  if (!input) return await message.sendReply('_Please provide some code/text!_\nUsage: `.carbon console.log("hi")`');
+  const code = match[1] || (message.quoted?.text || "");
+  if (!code) return await message.sendMessage("💡 Use: `.carbon console.log('Hello');`");
 
-  const carbonAPI = 'https://carbonara.solopov.dev/api/cook';
-  await message.sendReply('🎨 Generating Carbon Image...');
+  const res = await axios.post("https://carbonara.solopov.dev/api/cook", { code }, { responseType: 'arraybuffer' });
+  const filePath = './carbon.png';
+  await writeFile(filePath, res.data);
 
-  try {
-    const res = await axios.post(carbonAPI, { code: input }, { responseType: 'arraybuffer' });
-    const filename = './carbon_result.png';
-    await writeFile(filename, res.data);
-
-    await message.sendMessage({ image: { url: filename }, caption: "🖼️ Here's your Carbon code!" });
-    fs.unlinkSync(filename);
-  } catch (err) {
-    console.error(err);
-    return await message.sendReply('❌ Error generating Carbon image.');
-  }
+  await message.sendMessage({ image: { url: filePath }, caption: "🖼️ Here's your Carbon image!" });
+  fs.unlinkSync(filePath);
 });
