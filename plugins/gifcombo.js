@@ -28,16 +28,16 @@ for (let action in gifActions) {
     fromMe: false,
     desc: `Send ${action} gif`,
     type: 'gif'
-  }, async (message) => {
+  }, async (message, match, client) => {
     const gifUrl = gifActions[action];
     try {
-      await message.client.sendMessage(message.jid, {
+      await client.sendMessage(message.key.remoteJid, {
         video: { url: gifUrl },
         gifPlayback: true,
         caption: `🔞 *${action.toUpperCase()} ACTION!*`
       }, { quoted: message });
     } catch (e) {
-      await message.client.sendMessage(message.jid, {
+      await client.sendMessage(message.key.remoteJid, {
         text: `❌ Could not send *${action}* gif.`
       }, { quoted: message });
     }
