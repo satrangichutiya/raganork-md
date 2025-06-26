@@ -1,19 +1,23 @@
-module.exports = {
-    name: "spam",
-    description: "Spam messages (Use carefully!)",
-    async handle(client, message, args) {
-        const count = parseInt(args[0]) || 5; // Default: 5 times
-        const text = args.slice(1).join(" ") || "Spam testing! 🚀"; 
+const { Module } = require('../main');
 
-        if (count > 20) {
-            return client.sendMessage(message.from, { 
-                text: "❌ Max limit: 20 messages (to avoid ban/spam detection)" 
-            });
-        }
+Module({
+  pattern: "spam ?(.*)",
+  fromMe: false,
+  desc: "Send spam messages",
+  type: "fun"
+}, async (message, match) => {
+  const input = match[1] || "";
+  const [count, ...textParts] = input.trim().split(" ");
+  const text = textParts.join(" ");
+  const times = parseInt(count);
 
-        for (let i = 0; i < count; i++) {
-            await client.sendMessage(message.from, { text: `${i+1}. ${text}` });
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Delay (1 second)
-        }
-    },
-};
+  if (!text || isNaN(times)) {
+    return await message.sendMessage("❌ Usage: `.spam 5 hello`\n➡️ Will send 'hello' 5 times.");
+  }
+
+  if (times > 30) return await message.sendMessage("❌ Limit 30 messages per spam.");
+
+  for (let i = 0; i < times; i++) {
+    await message.sendMessage(text);
+  }
+});
