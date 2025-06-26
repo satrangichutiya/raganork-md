@@ -7,28 +7,12 @@ async function getBuffer(url) {
   return res.data;
 }
 
-// List of gif actions and URLs
 const gifActions = {
-  slap: [
-    "https://media.tenor.com/IvA8MT7JVoUAAAAC/slap.gif",
-    "https://media.tenor.com/oYxZF2DRwjoAAAAC/anime-slap.gif"
-  ],
-  hug: [
-    "https://media.tenor.com/2rlvZ9Yuqb4AAAAC/anime-hug.gif",
-    "https://media.tenor.com/XW5oZh4SqqsAAAAC/hug-love.gif"
-  ],
-  kiss: [
-    "https://media.tenor.com/i3z_hFP05_oAAAAC/anime-kiss.gif",
-    "https://media.tenor.com/lUq3wCB7S9oAAAAC/kiss-cute.gif"
-  ],
-  nuke: [
-    "https://media.tenor.com/CM_7y-6I9nUAAAAC/nuke-explosion.gif",
-    "https://media.tenor.com/FSPVsxgMHiYAAAAC/nuclear-boom.gif"
-  ],
-  kill: [
-    "https://media.tenor.com/OE1xgZ6wktYAAAAC/kill-anime.gif",
-    "https://media.tenor.com/7vC61LVRThQAAAAC/kill-sword.gif"
-  ],
+  slap: ["https://media.tenor.com/IvA8MT7JVoUAAAAC/slap.gif"],
+  hug: ["https://media.tenor.com/2rlvZ9Yuqb4AAAAC/anime-hug.gif"],
+  kiss: ["https://media.tenor.com/i3z_hFP05_oAAAAC/anime-kiss.gif"],
+  nuke: ["https://media.tenor.com/CM_7y-6I9nUAAAAC/nuke-explosion.gif"],
+  kill: ["https://media.tenor.com/OE1xgZ6wktYAAAAC/kill-anime.gif"],
   fuck: ["https://media.tenor.com/dFvIBvTUkBEAAAAC/sex-hentai.gif"],
   bite: ["https://media.tenor.com/xTbGp0w_zD0AAAAC/bite-vampire.gif"],
   lick: ["https://media.tenor.com/38EZdkD5usIAAAAC/anime-lick.gif"],
@@ -46,28 +30,25 @@ const gifActions = {
   sex: ["https://media.tenor.com/8K7z1l_KGO8AAAAC/hentai-sex.gif"]
 };
 
-// Create a command for each action
+// Loop to create module for each action
 for (let action in gifActions) {
   Module({
     pattern: action,
     fromMe: false,
-    desc: `Sends a ${action} gif`,
-    type: 'gif'
-  }, async (message) => {
-    const gifList = gifActions[action];
-    const gifURL = gifList[Math.floor(Math.random() * gifList.length)];
+    desc: `Send ${action} GIF`,
+    type: "fun"
+  }, async (message, match, m) => {
+    const gifURL = gifActions[action][Math.floor(Math.random() * gifActions[action].length)];
 
     try {
       const buffer = await getBuffer(gifURL);
-      await message.client.sendMessage(message.jid, {
-        video: buffer,
+      await message.sendMessage(buffer, {
+        caption: `💥 *${action.toUpperCase()}!*`,
         gifPlayback: true,
-        caption: `💥 *${action.toUpperCase()}!*`
-      }, { quoted: message });
+        mimetype: 'video/gif'
+      }, 'video');
     } catch (err) {
-      await message.client.sendMessage(message.jid, {
-        text: `❌ Failed to send *${action}* gif.`
-      }, { quoted: message });
+      await message.send(`❌ Error: couldn't send *${action}* gif.`);
     }
   });
 }
