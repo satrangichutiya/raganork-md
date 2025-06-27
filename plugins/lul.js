@@ -3,25 +3,28 @@ const { Module } = require('../main');
 Module({
   pattern: 'lul',
   fromMe: false,
-  desc: 'Edits message with nonstop emoji raid loop 😈',
+  desc: 'Emoji cyclone animation 🌪️',
   type: 'fun'
 }, async (message) => {
   const emojis = [
-    "😂", "😭", "😶", "🥰", "💔", "🫩", "😁", "🤬", "🥴", "🥹", "🥲", "🫤", "👍",
-    "👺", "🌔", "🌘", "😘", "😉", "😗", "😙", "😚", "😋", "🙃", "😊", "☺️", "😌",
-    "🙂‍↕️", "🙂‍↔️", "🥺", "😬", "😋", "😛", "😝", "😜", "🥴", "😐", "🫣", "😶‍🌫️",
-    "🫢", "😔", "😥", "😢", "😞", "😓", "🫤", "😦", "🙁", "🧐", "😡", "🤥", "😇",
-    "🤠", "🤓", "🥸", "🤡", "😼", "😻", "🙀", "😺", "😿", "☃️", "👺", "💀", "👿",
-    "🎃", "😹", "💥", "🧠", "🔥", "🧨", "💣"
+    '😂', '😭', '😶', '🥰', '💔', '🫩', '😁', '🤬', '🥴', '🥹',
+    '🥲', '🫤', '👍', '👺', '🌔', '🌘', '😘', '😉', '😗', '😙',
+    '😚', '😋', '🙃', '😊', '☺️', '😌', '🥺', '😬', '😛', '😝',
+    '😜', '😐', '🫣', '😶‍🌫️', '🫢', '😔', '😥', '😢', '😞', '😓',
+    '😦', '🙁', '🧐', '😡', '🤥', '😇', '🤠', '🤓', '🥸', '🤡',
+    '😼', '😻', '🙀', '😺', '😿', '☃️', '💀', '👿', '🎃', '😹'
   ];
 
-  let sent = await message.reply("⚡ LUL Activated...");
+  const totalFrames = 50;
+  let emoji = emojis[Math.floor(Math.random() * emojis.length)];
 
-  for (let i = 0; i < emojis.length; i++) {
-    const emoji = emojis[i];
-    await new Promise(r => setTimeout(r, 200));
-    await sent.edit(`${emoji} ${emoji} ${emoji}`);
+  const sent = await message.sendMessage(emoji);
+
+  for (let i = 0; i < totalFrames; i++) {
+    await new Promise(r => setTimeout(r, 200)); // delay
+    emoji = emojis[Math.floor(Math.random() * emojis.length)];
+    await sent.edit(emoji);
   }
 
-  await sent.edit("💣 *EMOJI RAID COMPLETED* 😵‍💫\nType `.lul` again to restart.");
+  await sent.edit(`😵‍💫 *LUL OVERDRIVE DONE!* 🌪️\n🔥 ${emoji} 🔥`);
 });
