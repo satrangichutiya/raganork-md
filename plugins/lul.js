@@ -1,40 +1,46 @@
 const { Module } = require('../main');
 
+function sleep(ms) {
+  return new Promise((res) => setTimeout(res, ms));
+}
+
 Module({
   pattern: 'lul',
   fromMe: false,
-  desc: 'Emoji animation cyclone 🌪️ for WhatsApp',
-  type: 'fun',
-}, async (message, match, sock) => {
+  desc: 'Emoji mutation animation 😂😭💀',
+  type: 'fun'
+}, async (message) => {
+  const jid = message.jid;
+
   const emojis = [
     '😂', '😭', '😶', '🥰', '💔', '🫩', '😁', '🤬', '🥴', '🥹',
     '🥲', '🫤', '👍', '👺', '🌔', '🌘', '😘', '😉', '😗', '😙',
-    '😚', '😋', '🙃', '😊', '☺️', '😌', '🥺', '😬', '😛', '😝',
-    '😜', '😐', '🫣', '😶‍🌫️', '🫢', '😔', '😥', '😢', '😞', '😓',
-    '😦', '🙁', '🧐', '😡', '🤥', '😇', '🤠', '🤓', '🥸', '🤡',
-    '😼', '😻', '🙀', '😺', '😿', '☃️', '💀', '👿', '🎃', '😹'
+    '😚', '😋', '🙃', '😊', '☺️', '😌', '🙂‍↕️', '🙂‍↔️', '🥺',
+    '😬', '😛', '😝', '😜', '😐', '🫣', '😶‍🌫️', '🫢', '😔',
+    '😥', '😢', '😞', '😓', '😦', '🙁', '🧐', '😡', '🤥',
+    '😇', '🤠', '🤓', '🥸', '🤡', '😼', '😻', '🙀', '😺',
+    '😿', '☃️', '💀', '👿', '🎃', '😹'
   ];
 
-  let sent = await sock.sendMessage(message.key.remoteJid, {
-    text: emojis[Math.floor(Math.random() * emojis.length)],
-  }, { quoted: message });
+  let line = emojis.slice(0, 8); // Show 8 at a time
+  let sent = await message.sendMessage(line.join(' '));
 
-  for (let i = 0; i < 30; i++) {
-    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+  for (let i = 0; i < 50; i++) {
+    await sleep(500);
 
-    // delete old message
-    await sock.sendMessage(message.key.remoteJid, {
-      delete: sent.key
+    // Randomly pick an index in the line and change its emoji
+    const randIndex = Math.floor(Math.random() * line.length);
+    const newEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+    line[randIndex] = newEmoji;
+
+    await message.client.sendMessage(jid, {
+      edit: sent.key,
+      text: line.join(' ')
     });
-
-    // send new one
-    sent = await sock.sendMessage(message.key.remoteJid, {
-      text: emoji
-    });
-    await new Promise(r => setTimeout(r, 300)); // delay
   }
 
-  await sock.sendMessage(message.key.remoteJid, {
-    text: `🌪️ *Emoji Cyclone Complete!*\n😵 Final Emoji: ${emojis[Math.floor(Math.random() * emojis.length)]}`,
+  await message.client.sendMessage(jid, {
+    edit: sent.key,
+    text: `✨ Emoji Overload Complete 💥\n\n${line.join(' ')}`
   });
 });
