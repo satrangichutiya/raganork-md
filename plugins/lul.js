@@ -3,9 +3,9 @@ const { Module } = require('../main');
 Module({
   pattern: 'lul',
   fromMe: false,
-  desc: 'Emoji cyclone animation 🌪️',
-  type: 'fun'
-}, async (message) => {
+  desc: 'Emoji animation cyclone 🌪️ for WhatsApp',
+  type: 'fun',
+}, async (message, match, sock) => {
   const emojis = [
     '😂', '😭', '😶', '🥰', '💔', '🫩', '😁', '🤬', '🥴', '🥹',
     '🥲', '🫤', '👍', '👺', '🌔', '🌘', '😘', '😉', '😗', '😙',
@@ -15,16 +15,26 @@ Module({
     '😼', '😻', '🙀', '😺', '😿', '☃️', '💀', '👿', '🎃', '😹'
   ];
 
-  const totalFrames = 50;
-  let emoji = emojis[Math.floor(Math.random() * emojis.length)];
+  let sent = await sock.sendMessage(message.key.remoteJid, {
+    text: emojis[Math.floor(Math.random() * emojis.length)],
+  }, { quoted: message });
 
-  const sent = await message.sendMessage(emoji);
+  for (let i = 0; i < 30; i++) {
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
 
-  for (let i = 0; i < totalFrames; i++) {
-    await new Promise(r => setTimeout(r, 200)); // delay
-    emoji = emojis[Math.floor(Math.random() * emojis.length)];
-    await sent.edit(emoji);
+    // delete old message
+    await sock.sendMessage(message.key.remoteJid, {
+      delete: sent.key
+    });
+
+    // send new one
+    sent = await sock.sendMessage(message.key.remoteJid, {
+      text: emoji
+    });
+    await new Promise(r => setTimeout(r, 300)); // delay
   }
 
-  await sent.edit(`😵‍💫 *LUL OVERDRIVE DONE!* 🌪️\n🔥 ${emoji} 🔥`);
+  await sock.sendMessage(message.key.remoteJid, {
+    text: `🌪️ *Emoji Cyclone Complete!*\n😵 Final Emoji: ${emojis[Math.floor(Math.random() * emojis.length)]}`,
+  });
 });
