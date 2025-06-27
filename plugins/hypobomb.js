@@ -3,9 +3,10 @@ const { Module } = require('../main');
 Module({
   pattern: 'hypobomb',
   fromMe: false,
-  desc: 'Hypnotic bomb terminal animation 💣🌀',
+  desc: 'Hypnotic bomb terminal animation 💣🌀 (edit-style)',
   type: 'fun'
 }, async (message) => {
+
   const frames = [
     '☠️ Initializing...\n\n▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒',
     '💣 Arming BOMB...\n\n▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒',
@@ -25,15 +26,16 @@ Module({
     '😵‍💫 User trapped in loop...'
   ];
 
-  await message.sendMessage({ text: "⚠️ Starting Hypnotic Bomb Sequence..." });
+  // send initial message
+  let animMessage = await message.reply("⚠️ Starting Hypnotic Bomb Sequence...");
 
   for (let i = 0; i < 30; i++) {
     const frame = frames[Math.floor(Math.random() * frames.length)];
-    await message.sendMessage({ text: frame });
-    await new Promise(r => setTimeout(r, 700));
+    await animMessage.edit(frame);
+    await new Promise(res => setTimeout(res, 700));
   }
 
-  await message.sendMessage({
-    text: `💣 *HYPO BOMB COMPLETED*\n\n😵‍💫 Victim trapped in illusionary matrix.\n🧠 Mind melted in digital waves.\n\nUse command again to reloop.`,
-  });
+  await animMessage.edit(
+    `💣 *HYPO BOMB COMPLETED*\n\n😵‍💫 Victim trapped in illusionary matrix.\n🧠 Mind melted in digital waves.\n\nUse command again to reloop.`
+  );
 });
