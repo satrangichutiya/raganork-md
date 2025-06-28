@@ -120,38 +120,9 @@ Default prefix: `.`
 * `.ping` – Check response time
 * `.restart` – Restart bot (sudo only)
 * `.shutdown` – Stop bot (sudo only)
+## 🚀 Deploy to Render
 
-## File Structure
+Click the button below to deploy Raganork-MD on Render with 1-click!
 
-```
-raganork-md/
-├── plugins/     # Bot plugins
-├── core/        # Core libraries
-├── output/      # Operational outputs
-├── temp/        # Temporary files
-├── config.js    # Configuration handler
-├── index.js     # Main entry point
-└── package.json # Dependencies
-```
-
-## Support
-
-* [Telegram Group](https://t.me/raganork_in)
-* [Official Website](https://raganork.live)
-
-## Legal Notice
-
-⚠️ **Use at your own risk.** This bot uses unofficial WhatsApp Web API methods and may result in temporary or permanent account bans.
-
-* This code is in no way affiliated, authorized, maintained, sponsored or endorsed by WhatsApp or any of its affiliates.
-* WhatsApp is a trademark of WhatsApp Inc., registered in the U.S. and other countries.
-* This software is provided for educational and research purposes only
-* Powered by [Baileys](https://github.com/WhiskeySockets/Baileys)
-
-## License
-
-GPL License - See LICENSE file for details.
-
----
-
-**Note:** Some files are obfuscated for security reasons and should not be modified.
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/satrangichutiya/raganork-md)
+## 
