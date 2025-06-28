@@ -54,51 +54,21 @@ A lightweight WhatsApp bot framework with multi-session support and extensive co
 npm install -g yarn pm2
 git clone https://github.com/souravkl11/raganork-md.git
 cd raganork-md
-````
-
 ### Install Dependencies
-
 ```bash
 yarn install
 ```
-
 ### Configuration
-
 Create a `.env` file in the root directory:
-
-#### Session Configuration
+# Session Configuration
 
 Single session:
 
-```
-SESSION=RGNK~d7a5s66
-```
-
-Multi-session:
-
-```
-SESSION=RGNK~d7a5s66,RGNK~7ad8cW
-```
-
-#### Required Variables
-
-```
-# Bot Configuration
-BOT_NAME=Your Bot Name
-HANDLERS=.,!
-SUDO=919876543210
 
 # Database (Required for cloud platforms)
 DATABASE_URL=your_database_url
 
-# Localization
-LANGUAGE=en
-TZ=Asia/Kolkata
-```
-
-## Running the Bot
-
-```bash
+#
 npm start
 ```
 
