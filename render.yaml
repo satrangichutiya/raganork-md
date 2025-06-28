@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: raganork-md
+    env: node
+    buildCommand: yarn install --ignore-engines
+    startCommand: yarn start
+    plan: free
+    envVars:
+      - key: SESSION
+        sync: false
