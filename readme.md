@@ -95,4 +95,4 @@ Default prefix: `.`
 Click the button below to deploy Raganork-MD on Render with 1-click!
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/satrangichutiya/raganork-md)
-## 
+## quay.io/satrangichutiya/raganork-md:latest
